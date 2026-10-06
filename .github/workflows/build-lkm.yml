@@ -5,19 +5,35 @@ on:
       package_name:
         description: 'package name of manager'
         required: false
-        default: ''
+        default: 'yhaxhr.birgvn.bmwbne'
         type: string
       expected_size:
         description: 'expected signature size'
         required: false
-        default: ''
+        default: '998'
         type: string
       expected_hash:
         description: 'expected signature hash'
         required: false
-        default: ''
+        default: '79e590113c4c4c0c222978e413a5faa801666957b1212a328e46c00c69821bf7'
         type: string
   workflow_dispatch:
+    inputs:
+      package_name:
+        description: 'package name of manager'
+        required: false
+        default: 'yhaxhr.birgvn.bmwbne'
+        type: string
+      expected_size:
+        description: 'expected signature size'
+        required: false
+        default: '998'
+        type: string
+      expected_hash:
+        description: 'expected signature hash'
+        required: false
+        default: '79e590113c4c4c0c222978e413a5faa801666957b1212a328e46c00c69821bf7'
+        type: string
 jobs:
   build-lkm:
     strategy:
@@ -34,6 +50,7 @@ jobs:
     uses: ./.github/workflows/ddk-lkm.yml
     with:
       kmi: ${{ matrix.kmi }}
-      package_name: ${{ inputs.package_name || '' }}
-      expected_size: ${{ inputs.expected_size || '' }}
-      expected_hash: ${{ inputs.expected_hash || '' }}
+      package_name: ${{ inputs.package_name || 'yhaxhr.birgvn.bmwbne' }}
+      expected_size: ${{ inputs.expected_size || '998' }}
+      expected_hash: ${{ inputs.expected_hash || '79e590113c4c4c0c222978e413a5faa801666957b1212a328e46c00c69821bf7' }}
+      
