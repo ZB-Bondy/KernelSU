@@ -1,0 +1,37 @@
+name: Build LKM v3.4.0 (pinned source)
+on:
+  workflow_dispatch:
+jobs:
+  build-kernelsu-ko:
+    name: kernelsu.ko android15-6.6 from v3.4.0
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ylarod/ddk-min:android15-6.6-20260828
+      options: --privileged
+    steps:
+    - name: Checkout v3.4.0 source
+      uses: actions/checkout@v7
+      with:
+        ref: 1a879d6a866f80b1fa1c1009a2ffa747873cbb5e
+
+    - name: Build kernelsu.ko
+      run: |
+        git config --global --add safe.directory /__w/KernelSU/KernelSU
+        cd kernel
+        echo "=== Building kernelsu.ko v3.4.0 android15-6.6 ==="
+        CONFIG_KSU=m CC=clang make \
+          KSU_MANAGER_PACKAGE=yhaxhr.birgvn.bmwbne \
+          KSU_NEXT_MANAGER_SIZE=998 \
+          KSU_NEXT_MANAGER_HASH=79e590113c4c4c0c222978e413a5faa801666957b1212a328e46c00c69821bf7
+        OUT_DIR=/github/workspace/out/aarch64
+        mkdir -p $OUT_DIR
+        cp kernelsu.ko "$OUT_DIR/android15-6.6_kernelsu_v340.ko"
+        ls -la "$OUT_DIR/"
+        llvm-strip -d "$OUT_DIR/android15-6.6_kernelsu_v340.ko"
+
+    - name: Upload kernelsu.ko artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: aarch64-android15-6.6-lkm-v340
+        path: /github/workspace/out/aarch64/android15-6.6_kernelsu_v340.ko
+        
